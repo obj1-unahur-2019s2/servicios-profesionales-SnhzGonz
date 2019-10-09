@@ -1,0 +1,30 @@
+import profesionales.*
+import universidades.*
+import empresa.*
+describe "test de profesionales" {
+ 	const universidadSanMartin = new Universidades(provincia = "Buenos Aires", honorariosRecomendados = 3500)
+	const universidadRosario = new Universidades(provincia = "Rosario", honorariosRecomendados = 2800)
+	const universidadCorrientes = new Universidades(provincia = "Corrientes", honorariosRecomendados = 4200)
+	const universidadHurlingham = new Universidades(provincia = "Buenos Aires", honorariosRecomendados = 8800)
+	
+	const juana = new ProfesionalVinculado(universidad = universidadRosario)
+	const melina = new ProfesionalAsociado(universidad = universidadCorrientes)
+	const rocio = new ProfesionalLibre(universidad = universidadHurlingham, honorarios = 5000, provincia = #{"Santa Fe", "Córdoba", "Buenos Aires"})
+	const luciana = new ProfesionalLibre(universidad = universidadRosario, honorarios = 3200, provincia = #{"Santa Fe", "Entre Rios"})
+	
+	const empresaNueva = new EmpresaDeServicios(listaDeProfesionales = [juana, melina, rocio, luciana], honorariosDeReferencia = 3500 )
+	test "dos profesionales de Rosario"{
+		assert.equals(2, empresaNueva.cuantosEstudiaronEn(universidadRosario))
+		assert.equals(1, empresaNueva.cuantosEstudiaronEn(universidadHurlingham))
+		assert.equals(0, empresaNueva.cuantosEstudiaronEn(universidadSanMartin))
+	}
+	test "profesionales caros"{
+		assert.equals([rocio], empresaNueva.profesionalesCaros())
+	}
+	test "universidades formadoras"{
+		assert.equals(#{universidadRosario, universidadCorrientes, universidadHurlingham}, empresaNueva.universidadesFormadoras())
+	}
+	test "profesional mas barato"{
+		assert.equals(juana, empresaNueva.profesionalMasBarato())
+	}
+}
